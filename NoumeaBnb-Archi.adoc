@@ -1,0 +1,74 @@
+= SPEC-001: NouméaBnB
+:sectnums:
+:toc:
+
+== Background
+
+Le projet NouméaBnB est inspiré par le modèle d'affaires d'Airbnb, adapté spécifiquement à la location de gîtes à Nouméa. L'application se concentre sur la réservation de trois chambres dans un gîte, ciblant à la fois les adultes et les enfants, avec des tarifs ajustés en fonction de la durée du séjour, de la présence d'enfants et des jours spécifiques de la semaine. Le projet émerge de la nécessité d'offrir une expérience utilisateur simplifiée et directe pour la réservation de chambres, tout en permettant à un administrateur de gérer facilement les informations relatives au gîte, y compris les disponibilités et la tarification dynamique.
+
+== Requirements
+
+*Must Have:*
+
+- Interface utilisateur responsive pour la réservation de chambres.
+- CRUD complet pour la gestion des réservations par les utilisateurs et l'administrateur.
+- Gestion du calendrier pour afficher la disponibilité des chambres, avec une propriété dynamique permettant de bloquer des jours spécifiques (e.g., les lundis ou toute autre journée définie par l'administrateur).
+- Tarification dynamique basée sur :
+  - La durée du séjour (tarif hebdomadaire, tarif weekend).
+  - L'ajout d'enfants de plus de 2 ans.
+  - L'option d'un lit supplémentaire.
+- Validation des données saisies par les utilisateurs pour garantir la conformité avec les règles de réservation et de tarification.
+- Interface d'administration pour la gestion des informations du gîte.
+
+*Should Have:*
+
+- Test Driven Development (TDD) avec Jest pour assurer la qualité et la maintenabilité du code.
+
+*Could Have:*
+
+- Options de personnalisation pour l'administrateur afin d'ajuster les tarifs et les disponibilités selon des critères spécifiques non prévus initialement.
+
+*Won't Have (initially):*
+
+- Intégration de paiements en ligne.
+- Gestion des avis des utilisateurs.
+
+== Method
+
+Pour la conception technique de NouméaBnB, nous envisageons l'utilisation de la stack MERN (MongoDB, Express.js, React via Next.js, Node.js), en adéquation avec les pratiques de développement moderne et le besoin d'une application web responsive. Next.js facilitera la mise en œuvre de SSR (Server-Side Rendering) ou de SSG (Static Site Generation), ce qui est bénéfique pour le SEO et les performances de chargement de l'application. Le développement sera guidé par le principe du Test Driven Development (TDD), avec Jest comme framework de test pour garantir que chaque fonctionnalité développée répond aux exigences définies.
+
+*Architecture Design:*
+
+[PlantUML placeholder for architecture components]
+
+*Database Schema:*
+
+[PlantUML placeholder for database schema]
+
+*Algorithms and Logic for Dynamic Pricing and Calendar Management:*
+
+[PlantUML placeholder for algorithms]
+
+== Implementation
+
+*Définir les modèles de données et les relations dans MongoDB.*
+*Développer les API REST avec Express.js pour le traitement des CRUD opérations.*
+*Créer les pages et composants React avec Next.js pour l'interface utilisateur et l'interface d'administration, en tirant parti des avantages de SSR ou SSG pour une meilleure performance et SEO.*
+*Implémenter la logique de tarification dynamique et la gestion du calendrier.*
+*Écrire les tests unitaires et d'intégration avec Jest suivant la méthodologie TDD.*
+
+== Milestones
+
+1. Configuration de l'environnement de développement et du dépôt Git.
+2. Développement des modèles de données et configuration de la base de données.
+3. Implémentation des API REST pour les opérations CRUD.
+4. Création des pages et composants Next.js pour l'interface utilisateur.
+5. Ajout de la gestion du calendrier et de la tarification dynamique.
+6. Tests et validation.
+7. Déploiement initial et tests en conditions réelles.
+
+== Gathering Results
+
+*Évaluation de l'application en fonction des retours des utilisateurs.*
+*Analyse des performances du système et de la base de données.*
+*Vérification de la couverture des tests et de la conformité avec les exigences initiales.*
