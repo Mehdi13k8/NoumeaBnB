@@ -47,7 +47,13 @@ async function generateData() {
       name: faker.commerce.productName(),
       type: faker.helpers.arrayElement(["Single", "Double", "Suite"]),
       isAvailable: faker.datatype.boolean(),
-      price: faker.commerce.price(),
+      price: 5000,
+      weeklyPrice: 5000,
+      weekendPrice: 7000,
+      childrenPrice: 1500,
+      childrenWeekendPrice: 2000,
+      childrenBedPrice: 1000,
+      //faker.commerce.price(),
       description: faker.lorem.sentences(),
       photo: faker.image.url(),
       photos: [faker.image.url(), faker.image.url()],
@@ -74,7 +80,8 @@ async function generateData() {
       numberOfAdults: faker.number.int(1, 4), // Updated method (was: faker.random.number()
       numberOfChildren: faker.number.int(0, 2),
       totalPrice: faker.commerce.price(),
-      user: randomUser._id,
+      // get random user from users
+      user: faker.helpers.arrayElement(users)._id,
     });
   }
 

@@ -1,7 +1,7 @@
 // models/User.js
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -24,7 +24,11 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
-  // Add any additional fields as needed
+  // Active users
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 }, {
   timestamps: true, // Adds createdAt and updatedAt timestamps
 });
@@ -41,6 +45,37 @@ userSchema.pre('save', async function(next) {
     next(err);
   }
 });
+
+// Method to compare passwords
+userSchema.methods.comparePassword = async function(password) {
+  return bcrypt.compare(password, this.password);
+};
+
+// Method to create token
+userSchema.methods.createToken = function() {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET);
+}
+
+// check token validity
+userSchema.statics.checkToken = async function(token) {
+  return jwt.verify(token, process.env.JWT_SECRET);
+}
+
+// who is logged from token
+userSchema.statics.whoIsLogged = async function(token) {
+  // remove bearer from token
+  token = token.split(' ')[1];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return await this.findById(decoded.id);
+}
+
+// get all reseravations of a user
+userSchema.virtual('reservations', {
+  ref: 'Reservation',
+  localField: '_id',
+  foreignField: 'user'
+});
+
 
 userSchema.set('toJSON', { virtuals: true });
 

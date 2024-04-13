@@ -35,6 +35,26 @@ const roomSchema = new mongoose.Schema({
     type: Array,
     required: true
   },
+  weeklyPrice : {
+    type: Number,
+    required: true
+  },
+  weekendPrice : {
+    type: Number,
+    required: true
+  },
+  childrenPrice : {
+    type: Number,
+    required: true
+  },
+  childrenWeekendPrice : {
+    type: Number,
+    required: true
+  },
+  childrenBedPrice : {
+    type: Number,
+    required: true
+  },
   // Add additional fields as necessary
 });
 

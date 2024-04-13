@@ -29,7 +29,6 @@ const RoomDetails = () => {
     const fetchReservation = async () => {
       try {
         const response = await axios.get(`http://127.0.0.1:5000/api/reservations/room/${id}`);
-        console.log(response.data);
         setReservation(response.data);
       } catch (error) {
         console.error('Error fetching reservation details:', error);
@@ -38,8 +37,15 @@ const RoomDetails = () => {
 
     fetchReservation();
     fetchRoomDetails();
-  }, [id]); // Adjust dependencies based on how you retrieve the room's ID
+  }, [id]);
 
+  useEffect(() => {
+    if (room) {
+      setLoading(false);
+    }
+    console.log('id', room);
+  }, [room]);
+  
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -49,7 +55,7 @@ const RoomDetails = () => {
         <div className="w-full md:w-1/2 px-2 mb-4">
           <img src={room?.photo} alt={room?.name} className="rounded shadow" />
           <div className="flex mt-2">
-            {room?.photos.map((photo, index) => (
+            {room?.photos?.map((photo, index) => (
               <img key={index} src={photo} alt={`Room view ${index + 1}`} className="w-1/3 p-1" />
             ))}
           </div>
@@ -60,16 +66,12 @@ const RoomDetails = () => {
           <p><strong>Description:</strong> {room?.description}</p>
           <p><strong>Status:</strong> {room?.isAvailable ? "Available" : "Not Available"}</p>
           <h2 className="text-xl font-bold mt-4 mb-2">Reviews</h2>
-          {room?.reviews.map((review, index) => (
+          {room?.reviews?.map((review, index) => (
             <p key={index}><strong>{review.user}:</strong> {review?.review}</p>
           ))}
           <h2 className="text-xl font-bold mt-4">Book This Room</h2>
-          {/* Simple reservation form */}
-          {/* <form> */}
-            {/* <input type="date" className="border p-2 rounded mb-2" /> */}
-            {/* <button type="submit" className="bg-blue-500 text-white p-2 rounded">Reserve</button> */}
-            <RoomReservationForm existingReservations={reservation} dailyRate={room.price} />
-          {/* </form> */}
+          {/* <RoomReservationForm existingReservations={reservation} dailyRate={room.price} /> */}
+          <RoomReservationForm existingReservations={reservation} room={room} />
         </div>
       </div>
     </div>

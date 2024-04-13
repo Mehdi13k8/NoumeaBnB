@@ -26,7 +26,12 @@ const reservationSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  // Add additional fields as needed
+  // user who made the reservation
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }
 });
 
 reservationSchema.set('toJSON', { virtuals: true });

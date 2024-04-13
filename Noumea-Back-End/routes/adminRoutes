@@ -1,0 +1,21 @@
+// Example for adminRoutes.js
+const express = require('express');
+const router = express.Router();
+const AdminController = require('../controllers/AdminController');
+
+// Middleware to check if user is admin
+router.use((req, res, next) => {
+    if (req.user.isAdmin) {
+        next();
+    } else {
+        res.status(403).send('Access Denied');
+    }
+});
+
+router.get('/users', AdminController.listUsers);
+router.post('/users', AdminController.createUser);
+router.delete('/users/:id', AdminController.deleteUser);
+router.get('/stats', AdminController.getStats);
+
+module.exports = router;
+ 

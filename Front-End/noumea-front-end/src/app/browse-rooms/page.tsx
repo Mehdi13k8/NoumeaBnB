@@ -17,7 +17,6 @@ const BrowseRooms = () => {
   
     // Fetch rooms from your API
     axios.get(url).then((response) => {
-      console.log(response.data);
       setRooms(response.data);
     }).catch((error) => {
       console.error('Error fetching rooms', error);

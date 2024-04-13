@@ -17,6 +17,10 @@ var PORT = process.env.PORT || 5000;
 var app = express();
 var cors = require('cors');
 app.use(cors());
+// app.use(cors({
+//   origin: '*:3000', // Adjust this to match your front-end URL
+//   credentials: true
+// }));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
