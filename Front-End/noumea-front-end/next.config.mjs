@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // basePath: '/noumea',
-    basePath: '',
+  // basePath: '/noumea',
+  basePath: "",
+  images: {
+    domains: ["picsum.photos"],
+  },
 };
 
 export default nextConfig;

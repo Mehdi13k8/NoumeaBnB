@@ -7,10 +7,25 @@ const Users = require("../models/User");
 // Create a new reservation
 exports.createReservation = async (req, res) => {
   try {
-    const newReservation = new Reservation(req.body);
+    let Token = req.header("Authorization");
+    console.log("Token ==> ", Token);
+    const user = await Users.whoIsLogged(Token);
+
+    // create Reservation object with user id
+    const ReservationObject = {
+      room: req.body.roomId,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      numberOfAdults: req.body.numberOfAdults,
+      numberOfChildren: req.body.numberOfChildren,
+      totalPrice: req.body.totalPrice,
+      user: user._id,
+    };
+    const newReservation = new Reservation(ReservationObject);
     await newReservation.save();
     res.status(201).json(newReservation);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };

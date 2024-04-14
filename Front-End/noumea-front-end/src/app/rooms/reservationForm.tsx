@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, differenceInDays, isMonday, format, eachDayOfInterval, isSaturday, isSunday } from 'date-fns';
+import axios from 'axios';
+import Swal from 'sweetalert2'
 
 const RoomReservationForm = ({ existingReservations, room }) => {
   const [startDate, setStartDate] = useState("");
@@ -19,6 +21,7 @@ const RoomReservationForm = ({ existingReservations, room }) => {
     let price = 0;
     const days = eachDayOfInterval({ start: startDate, end: endDate });
 
+    // console.log("days", days, totalDays);
     days.forEach(day => {
       const isWeekend = isSaturday(day) || isSunday(day);
       // Base room price if not a weekend
@@ -42,10 +45,39 @@ const RoomReservationForm = ({ existingReservations, room }) => {
 
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here, implement the submission logic, such as sending the data to your backend API
-    // console.log({ startDate, endDate, includeChildren, includeChildrenBed, totalPrice });
+
+    const header = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('token')}`
+    };
+    const reservationData = {
+      roomId: room._id,
+      startDate: format(startDate, 'yyyy-MM-dd'),
+      endDate: format(endDate, 'yyyy-MM-dd'),
+      totalPrice: calculateTotalPrice(),
+      numberOfAdults: 1,
+      includeChildren,
+      includeChildrenBed
+    };
+
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/api/reservations', reservationData, { headers: header });
+      // sweet alert
+      Swal.fire({
+        title: 'Reservation Created!',
+        text: 'Your reservation has been successfully created.',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      }).then(() => {
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
+      });
+    } catch (error) {
+      console.error('Error creating reservation:', error);
+      alert('Failed to create reservation. Error: ' + error.response.data.error);
+    }
   };
 
   // Function to update state and recalculate price when form inputs change
@@ -62,6 +94,10 @@ const RoomReservationForm = ({ existingReservations, room }) => {
     return existingReservations.some(reservation => {
       const reservationStartDate = new Date(reservation.startDate);
       const reservationEndDate = new Date(reservation.endDate);
+      const isBlocked = date <= reservationStartDate || date >= reservationEndDate;
+      return  isBlocked;
+      console.log("-->", date >= reservationStartDate && date <= reservationEndDate);
+      // if date is in between start and end date of any reservation, block it
       return date >= reservationStartDate && date <= reservationEndDate;
     });
   };
@@ -87,13 +123,14 @@ const RoomReservationForm = ({ existingReservations, room }) => {
           endDate={endDate}
           filterDate={isDayBlocked}
           placeholderText="Select start date"
-          className="border p-2 rounded mb-2"
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           dateFormat="yyyy-MM-dd"
         />
       </div>
       <div className="date-picker">
         <label>End Date:</label>
         <DatePicker
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           selected={endDate}
           onChange={(date) => {
             if (startDate && date > startDate) {
@@ -110,25 +147,28 @@ const RoomReservationForm = ({ existingReservations, room }) => {
           minDate={startDate}
           filterDate={isDayBlocked}
           placeholderText="Select end date"
-          className="border p-2 rounded mb-2"
           // show date in yyyy-mm-dd format
           dateFormat="yyyy-MM-dd"
         />
       </div>
       <div>
         <label>
-          <input type="checkbox" checked={includeChildren} onChange={() => setIncludeChildren(!includeChildren)} />
+          <input className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            type="checkbox" checked={includeChildren} onChange={() => setIncludeChildren(!includeChildren)} />
           Include children
         </label>
       </div>
-      <div>
-        <label>
-          <input type="checkbox" checked={includeChildrenBed} onChange={() => setIncludeChildrenBed(!includeChildrenBed)} />
+      <div className="flex items-center">
+        <label className="ml-2 block text-sm text-gray-900">
+          <input className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            type="checkbox" checked={includeChildrenBed} onChange={() => setIncludeChildrenBed(!includeChildrenBed)} />
           Include children's bed
         </label>
       </div>
-      <div>Total Price: ${totalPrice.toFixed(2)}</div>
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">Confirm Reservation</button>
+      <div className="text-lg font-medium">
+        Total Price: ${totalPrice.toFixed(2)}</div>
+      <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Confirm Reservation</button>
     </form>
   );
 };
