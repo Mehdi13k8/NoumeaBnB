@@ -22,7 +22,7 @@ const Dashboard = () => {
                 const config = {
                     headers: { Authorization: `Bearer ${token}` }
                 };
-                const response = await axios.get('http://localhost:5000/api/users/getLoggedUser', config);
+                const response = await axios.get(process.env.NEXT_PUBLIC_API_URL + '/api/users/getLoggedUser', config);
                 setUser(response.data);
             } catch (err) {
                 setError('Failed to fetch user data');

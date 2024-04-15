@@ -63,7 +63,7 @@ const RoomReservationForm = ({ existingReservations, room }) => {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/reservations', reservationData, { headers: header });
+      const response = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/api/reservations', reservationData, { headers: header });
       // sweet alert
       Swal.fire({
         title: 'Reservation Created!',

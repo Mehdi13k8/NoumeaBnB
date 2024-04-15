@@ -11,6 +11,7 @@ const HomePage = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const router = useRouter();
+  console.log("Loading ==>", process.env.NEXT_PUBLIC_API_URL);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -23,7 +24,7 @@ const HomePage = () => {
           const config = {
             headers: { Authorization: `Bearer ${token}` }
           };
-          const response = await axios.get('http://localhost:5000/api/users/getLoggedUser', config);
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users/getLoggedUser`, config);
           setUser(response.data);
         } catch (err) {
           console.error('Failed to fetch user data', err);

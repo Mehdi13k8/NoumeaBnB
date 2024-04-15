@@ -12,6 +12,7 @@
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "faker": "^6.6.6",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.1.0",

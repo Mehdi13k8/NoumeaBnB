@@ -23,7 +23,7 @@ const AuthForm = () => {
             console.log('Attempting to log in...');
             // Perform login
             try {
-                const response = await axios.post('http://localhost:5000/api/users/login', formData);
+                const response = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/api/users/login', formData);
                 console.log('Login successful', response.data);
                 // save token in local storage
                 localStorage.setItem('token', response.data.token);
@@ -35,7 +35,7 @@ const AuthForm = () => {
             console.log('Attempting to register...');
             // Perform registration
             try {
-                const response = await axios.post('http://localhost:5000/api/users', formData);
+                const response = await axios.post(process.env.NEXT_PUBLIC_API_URL + '/api/users', formData);
                 setIsLogin(true);
             } catch (error) {
                 console.error('Registration failed', error.response.data);
