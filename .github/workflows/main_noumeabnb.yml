@@ -59,12 +59,14 @@ jobs:
       # Deploy Back-End
       - name: Download and Deploy Back-End to Azure Web App
         run: |
+          cd Noumea-Back-End
           unzip Noumea-Back-End.zip
           # Add Azure CLI commands to deploy the back-end project
 
       # Deploy Front-End
       - name: Download and Deploy Front-End to Azure Web App
         run: |
+          cd noumea-front-end
           unzip noumea-front-end.zip
           # Add Azure CLI commands to deploy the front-end project
 
