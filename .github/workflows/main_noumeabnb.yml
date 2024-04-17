@@ -92,7 +92,7 @@ jobs:
       - run: ls
 
       - name: Unzip artifact for deployment
-        run: unzip Noumea-Back-End.zip
+        run: unzip -o Noumea-Back-End.zip
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -100,7 +100,7 @@ jobs:
           name: front-end-app
 
       - name: Unzip artifact for deployment
-        run: unzip noumea-front-end.zip
+        run: unzip -o noumea-front-end.zip
 
       - name: Login to Azure
         uses: azure/login@v1
