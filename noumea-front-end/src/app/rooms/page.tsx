@@ -4,6 +4,7 @@ import axios from 'axios';
 import RoomReservationForm from './reservationForm';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation'; // Correct import for Next.js new navigation system
+import { Suspense } from 'react';
 
 
 const RoomDetails = () => {
@@ -11,7 +12,7 @@ const RoomDetails = () => {
   const [loading, setLoading] = useState(true);
   const [reservation, setReservation] = useState([]);
 
-  const router : any = useRouter();
+  const router: any = useRouter();
   // get the room ID from the URL
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
@@ -56,7 +57,7 @@ const RoomDetails = () => {
         <div className="w-full md:w-1/2 px-2 mb-4">
           <img src={room?.photo} alt={room?.name} className="rounded shadow-lg mb-4" />
           <div className="flex mt-2">
-            {room?.photos?.map((photo : any, index: Key) => (
+            {room?.photos?.map((photo: any, index: Key) => (
               <img key={index} src={photo} alt={`Room view ${Number(index) + 1}`} className="w-1/3 p-1" />
             ))}
           </div>
@@ -78,4 +79,9 @@ const RoomDetails = () => {
   );
 };
 
-export default RoomDetails;
+// export default RoomDetails;
+export default function RoomDetailsWithSuspense() {
+  <Suspense fallback={<div>Loading...</div>}>
+    <RoomDetails />
+  </Suspense>
+};
