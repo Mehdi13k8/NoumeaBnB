@@ -89,6 +89,8 @@ jobs:
         with:
           name: back-end-app
 
+      - run: ls
+
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
