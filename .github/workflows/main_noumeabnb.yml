@@ -1,4 +1,7 @@
-name: Build and deploy Node.js apps to Azure Web App - NoumeaBnB
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy Node.js app to Azure Web App - noumeaBnB
 
 on:
   push:
@@ -7,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,75 +21,51 @@ jobs:
         with:
           node-version: '20.x'
 
-      # Handle Back-End
-      - name: npm install, build, and test (Back-End)
+      - name: npm install, build, and test
         run: |
-          cd Noumea-Back-End
           npm install
           npm run build --if-present
           npm run test --if-present
 
-      - name: Zip Back-End artifact for deployment
-        run: |
-          cd Noumea-Back-End
-          zip -r Noumea-Back-End.zip .
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
-      - name: Upload Back-End artifact for deployment
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: back-end-app
-          path: Noumea-Back-End/Noumea-Back-End.zip
+          name: node-app
+          path: release.zip
 
-      # Handle Front-End
-      - name: npm install, build, and test (Front-End)
-        run: |
-          cd noumea-front-end
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
-      - name: Zip Front-End artifact for deployment
-        run: |
-          cd noumea-front-end
-          zip -r noumea-front-end.zip .
-
-      - name: Upload Front-End artifact for deployment
-        uses: actions/upload-artifact@v3
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
         with:
-          name: front-end-app
-          path: noumea-front-end/noumea-front-end.zip
+          name: node-app
 
-      # Deploy Back-End
-      - name: Download and Deploy Back-End to Azure Web App
-        run: |
-          cd Noumea-Back-End
-          unzip -o Noumea-Back-End.zip
-          # Add Azure CLI commands to deploy the back-end project
-
-      # Deploy Front-End
-      - name: Download and Deploy Front-End to Azure Web App
-        run: |
-          cd noumea-front-end
-          unzip -o noumea-front-end.zip
-          # Add Azure CLI commands to deploy the front-end project
-
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+      
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_79A226E9CC9C43139D65FE0923653C99 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_89DA2AC8E4D34119A4156C1F2F69C181 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F69A58EC793E438F9A29B8F0C8316B4D }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0353070B99814EA39A72C94A89A10B0C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_83399971E35E47188B769391932BE913 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9670582E6F924D1899C050C89AC396AB }}
 
-      - name: 'Deploy to Azure Web App (Back-End)'
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'noumeaBnB-backend'
+          app-name: 'noumeaBnB'
           slot-name: 'Production'
-          package: Noumea-Back-End
-
-      - name: 'Deploy to Azure Web App (Front-End)'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'noumeaBnB-frontend'
-          slot-name: 'Production'
-          package: noumea-front-end
+          package: .
+          
