@@ -48,7 +48,7 @@ jobs:
       - name: Zip Front-End artifact for deployment
         run: |
           cd noumea-front-end
-          zip -r noumea-front-end.zip build/
+          zip -r noumea-front-end.zip .
 
       - name: Upload Front-End artifact for deployment
         uses: actions/upload-artifact@v3
