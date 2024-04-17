@@ -11,7 +11,6 @@ const HomePage = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const router = useRouter();
-  console.log("Loading ==>", process.env.NEXT_PUBLIC_API_URL);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -68,6 +67,10 @@ const HomePage = () => {
         <nav className="bg-white shadow py-4">
           <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
             <div className="text-2xl text-blue-600 font-bold">NouméaBnB</div>
+            {/* dashboard page */}
+            <Link href="/dashboard" legacyBehavior>
+              <a className="text-blue-600 hover:underline">Dashboard</a>
+            </Link>
             <button onClick={handleLogout} className="text-red-600 hover:text-red-800 px-3 py-2 rounded">Logout</button>
           </div>
         </nav>

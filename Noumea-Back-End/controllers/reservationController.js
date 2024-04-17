@@ -8,7 +8,6 @@ const Users = require("../models/User");
 exports.createReservation = async (req, res) => {
   try {
     let Token = req.header("Authorization");
-    console.log("Token ==> ", Token);
     const user = await Users.whoIsLogged(Token);
 
     // create Reservation object with user id
@@ -33,14 +32,12 @@ exports.createReservation = async (req, res) => {
 // Get a reservation by ID
 exports.getReservationById = async (req, res) => {
   try {
-    console.log("getReservationById");
     const reservation = await Reservation.findById(req.params.id).populate(
       "room"
     );
     if (!reservation) {
       return res.status(404).json({ message: "Reservation not found" });
     }
-    console.log("gg");
     res.json(reservation);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -64,8 +61,9 @@ exports.getAllReservations = async (req, res) => {
     const count = await Reservation.countDocuments();
     // console.log(`Found ${count} reservations`);
 
-    const reservations = await Reservation.find().populate("room");
-    // console.log("Reservations:", reservations);
+    let reservations = await Reservation.find().populate("room").populate("room.photo");
+    // add photo from room to reservation
+    console.log("Photo ==> ", reservations);
 
     res.json(reservations);
   } catch (error) {

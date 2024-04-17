@@ -77,7 +77,7 @@ const Dashboard = () => {
         };
 
         if (selectedBooking) {
-            fetchRoomDetails(selectedBooking.room);
+            fetchRoomDetails(selectedBooking.room._id);
         }
     }, [selectedBooking]);
 
@@ -109,27 +109,42 @@ const Dashboard = () => {
             {/* button home page  */}
             <div className="text-lg text-center mb-6">
                 <p>Welcome back, <span className="font-semibold">{user.name}</span>!</p>
-                <p>Your email: {user.email}</p>
-                <p>Your role: {user.role}</p>
             </div>
             <div className="mb-4">
                 <h2 className="text-2xl font-bold">Your Bookings</h2>
                 {bookings.length > 0 ? (
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         {bookings.map(booking => (
-                            <div key={booking._id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg cursor-pointer" onClick={() => setSelectedBooking(booking)}>
-                                <h3 className="text-lg font-semibold">Booking for Room: {booking.room}</h3>
-                                <p>Start: {new Date(booking.startDate).toLocaleDateString()}</p>
-                                <p>End: {new Date(booking.endDate).toLocaleDateString()}</p>
-                                <p>Adults: {booking.numberOfAdults} | Children: {booking.numberOfChildren}</p>
-                                <p>Total Price: ${booking.totalPrice.toFixed(2)}</p>
+                            <div key={booking._id}
+                                className="bg-white p-6 rounded-xl shadow transition-shadow duration-300 ease-in-out hover:shadow-lg cursor-pointer"
+                                onClick={() => setSelectedBooking(booking)}>
+                                {/* Room image */}
+                                <img src={booking.room.photo} alt={`Room ${booking.room._id}`}
+                                    className="w-full h-40 object-cover rounded-t-lg" />
+
+                                <div className="mt-4">
+                                    <h3 className="text-lg font-semibold text-gray-800">Booking for Room: {booking.room.name}</h3>
+                                    <div className="mt-2 text-sm text-gray-600">
+                                        <p>Start: {new Date(booking.startDate).toLocaleDateString()}</p>
+                                        <p>End: {new Date(booking.endDate).toLocaleDateString()}</p>
+                                    </div>
+                                    <div className="mt-2 text-sm">
+                                        <p>Adults: {booking.numberOfAdults}</p>
+                                        <p>Children: {booking.numberOfChildren}</p>
+                                    </div>
+                                    <div className="mt-4 font-semibold">
+                                        <p>Total Price: <span className="text-green-500">${booking.totalPrice.toFixed(2)}</span></p>
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
                 ) : (
-                    <p className="text-gray-600">No bookings found.</p>
+                    <p className="text-gray-500 text-center mt-6">No bookings found.</p>
                 )}
+
             </div>
+            {console.log(selectedBooking, roomDetails)}
             {selectedBooking && roomDetails && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg p-6 max-w-3xl w-full">
@@ -139,8 +154,9 @@ const Dashboard = () => {
                             {roomDetails.photos.map(photo => (
                                 <img key={photo} src={photo} alt="Room" />
                             ))}
+                            <img key={roomDetails.photo} src={roomDetails.photo} alt="Room" />
                         </Carousel>
-                        <p><strong>Room:</strong> {selectedBooking.room}</p>
+                        <p><strong>Room:</strong> {selectedBooking.room.name}</p>
                         <p><strong>Start Date:</strong> {new Date(selectedBooking.startDate).toLocaleDateString()}</p>
                         <p><strong>End Date:</strong> {new Date(selectedBooking.endDate).toLocaleDateString()}</p>
                         <p><strong>Adults:</strong> {selectedBooking.numberOfAdults}</p>
