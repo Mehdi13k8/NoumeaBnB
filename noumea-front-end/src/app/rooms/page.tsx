@@ -1,5 +1,5 @@
 "use client"; // This is a client component
-import React, { useEffect, useState } from 'react';
+import React, { Key, useEffect, useState } from 'react';
 import axios from 'axios';
 import RoomReservationForm from './reservationForm';
 import Link from 'next/link';
@@ -7,11 +7,11 @@ import { useRouter, useSearchParams } from 'next/navigation'; // Correct import 
 
 
 const RoomDetails = () => {
-  const [room, setRoom] = useState(null);
+  const [room, setRoom] = useState(null) as any;
   const [loading, setLoading] = useState(true);
   const [reservation, setReservation] = useState([]);
 
-  const router = useRouter();
+  const router : any = useRouter();
   // get the room ID from the URL
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
@@ -56,8 +56,8 @@ const RoomDetails = () => {
         <div className="w-full md:w-1/2 px-2 mb-4">
           <img src={room?.photo} alt={room?.name} className="rounded shadow-lg mb-4" />
           <div className="flex mt-2">
-            {room?.photos?.map((photo, index) => (
-              <img key={index} src={photo} alt={`Room view ${index + 1}`} className="w-1/3 p-1" />
+            {room?.photos?.map((photo : any, index: Key) => (
+              <img key={index} src={photo} alt={`Room view ${Number(index) + 1}`} className="w-1/3 p-1" />
             ))}
           </div>
         </div>
@@ -67,7 +67,7 @@ const RoomDetails = () => {
           <p><strong>Description:</strong> {room?.description}</p>
           <p><strong>Status:</strong> {room?.isAvailable ? "Available" : "Not Available"}</p>
           <h2 className="text-xl font-bold mt-4 mb-2">Reviews</h2>
-          {room?.reviews?.map((review, index) => (
+          {room?.reviews?.map((review: any, index: Key) => (
             <p key={index}><strong>{review.user}:</strong> {review.review}</p>
           ))}
           <h2 className="text-xl font-bold mt-4">Book This Room</h2>

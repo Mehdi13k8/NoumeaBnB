@@ -5,7 +5,7 @@ import { addDays, differenceInDays, isMonday, format, eachDayOfInterval, isSatur
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
-const RoomReservationForm = ({ existingReservations, room }) => {
+const RoomReservationForm = ({ existingReservations, room } : any) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [includeChildren, setIncludeChildren] = useState(false);
@@ -45,7 +45,7 @@ const RoomReservationForm = ({ existingReservations, room }) => {
 
 
   // Function to handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e : any) => {
     e.preventDefault();
 
     const header = {
@@ -74,7 +74,7 @@ const RoomReservationForm = ({ existingReservations, room }) => {
         // Redirect to dashboard
         window.location.href = '/dashboard';
       });
-    } catch (error) {
+    } catch (error : any) {
       console.error('Error creating reservation:', error);
       alert('Failed to create reservation. Error: ' + error.response.data.error);
     }
@@ -87,11 +87,11 @@ const RoomReservationForm = ({ existingReservations, room }) => {
   };
 
   // Block all Mondays
-  const isDayBlocked = (date) => {
+  const isDayBlocked = (date : any) => {
     // Block the day if it is a Monday
     if (isMonday(date)) return false;
     // Also block the day if it falls within any of the existing reservations
-    return existingReservations.some(reservation => {
+    return existingReservations.some((reservation : any) => { 
       const reservationStartDate = new Date(reservation.startDate);
       const reservationEndDate = new Date(reservation.endDate);
       const isBlocked = date <= reservationStartDate || date >= reservationEndDate;
@@ -104,23 +104,23 @@ const RoomReservationForm = ({ existingReservations, room }) => {
 
   useEffect(() => {
     handleFormChange();
-  }, [startDate, endDate, includeChildren, includeChildrenBed]);
+  }, [startDate, endDate, includeChildren, includeChildrenBed, handleFormChange]);
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="date-picker">
         <label>Start Date:</label>
         <DatePicker
-          selected={startDate}
-          onChange={(date) => {
+          selected={new Date(startDate)}
+          onChange={(date: any) => {
             // setStartDate(date);
             // save date as yyyy-mm-dd
             setStartDate(date);
             handleFormChange();
           }}
           selectsStart
-          startDate={startDate}
-          endDate={endDate}
+          startDate={new Date(startDate)}
+          endDate={new Date(endDate)}
           filterDate={isDayBlocked}
           placeholderText="Select start date"
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -131,8 +131,8 @@ const RoomReservationForm = ({ existingReservations, room }) => {
         <label>End Date:</label>
         <DatePicker
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          selected={endDate}
-          onChange={(date) => {
+          selected={new Date(endDate)}
+          onChange={(date: any) => {
             if (startDate && date > startDate) {
               setEndDate(date);
               handleFormChange();
@@ -142,9 +142,9 @@ const RoomReservationForm = ({ existingReservations, room }) => {
             }
           }}
           selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
+          startDate={new Date(startDate)}
+          endDate={new Date(endDate)}
+          minDate={new Date(startDate)}
           filterDate={isDayBlocked}
           placeholderText="Select end date"
           // show date in yyyy-mm-dd format
@@ -162,7 +162,7 @@ const RoomReservationForm = ({ existingReservations, room }) => {
         <label className="ml-2 block text-sm text-gray-900">
           <input className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
             type="checkbox" checked={includeChildrenBed} onChange={() => setIncludeChildrenBed(!includeChildrenBed)} />
-          Include children's bed
+          Include children bed
         </label>
       </div>
       <div className="text-lg font-medium">

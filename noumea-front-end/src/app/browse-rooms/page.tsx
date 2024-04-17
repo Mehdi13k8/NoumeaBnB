@@ -28,8 +28,8 @@ const BrowseRooms = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setUser(null);
-    setError('');
+    // setUser(null);
+    // setError('');
     console.log('User logged out.');
   };
 
@@ -46,7 +46,7 @@ const BrowseRooms = () => {
       <div className="p-4">
         <h1 className="text-2xl font-bold">Rooms Available</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-          {rooms.map((room) => (
+          {rooms.map((room : any) => (
             <div key={room._id} className="border p-4 rounded-lg">
               <h2 className="text-xl font-semibold">{room.name}</h2>
               <img src={room.photo} alt={room.name} className="mt-2 rounded" width={100} height={100} />
