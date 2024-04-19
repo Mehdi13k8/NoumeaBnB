@@ -1,0 +1,83 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy Node.js app to Azure Web App - noumeaBnB
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      # Handle Back-End
+      - name: npm install, build, and test (Back-End)
+        run: |
+          cd Noumea-Back-End
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+      - name: Zip Back-End artifact for deployment
+        run: |
+          cd Noumea-Back-End
+          zip -r Noumea-Back-End.zip .
+      - name: Upload Back-End artifact for deployment
+        uses: actions/upload-artifact@v3
+        with:
+          name: back-end-app
+          path: Noumea-Back-End/Noumea-Back-End.zip
+
+      # Deploy Back-End
+      - name: Download and Deploy Back-End to Azure Web App
+        run: |
+          cd Noumea-Back-End
+          unzip -o Noumea-Back-End.zip
+          # Add Azure CLI commands to deploy the back-end project
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: back-end-app
+
+
+      - name: Unzip artifact for deployment
+        run: |
+          mkdir -p Noumea-Back-End
+          cd Noumea-Back-End
+          unzip -o ../Noumea-Back-End.zip
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_82F850486A8747B29CC7F3D5415688DB }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9655D1E515614CFEAE447DCEA5503E8E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5933E69D315E47A489C15A80B6C24B0D }}
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'noumeaBnB'
+          slot-name: 'Production'
+          package: .
