@@ -13,7 +13,7 @@ const BrowseRooms = () => {
     const headers = {
       "Content-Type": "application/json",
     };
-    const url = "http://127.0.0.1:5000/api/rooms";
+    const url = "http://127.0.0.1:8088/api/rooms";
 
     // Fetch rooms from your API
     axios.get(url).then((response) => {

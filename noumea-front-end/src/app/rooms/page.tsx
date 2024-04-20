@@ -20,7 +20,7 @@ const RoomDetails = () => {
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/api/rooms/${id}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/rooms/${id}`);
         setRoom(response.data);
       } catch (error) {
         console.error('Error fetching room details:', error);
@@ -31,7 +31,7 @@ const RoomDetails = () => {
 
     const fetchReservation = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:5000/api/reservations/room/${id}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/reservations/room/${id}`);
         setReservation(response.data);
       } catch (error) {
         console.error('Error fetching reservation details:', error);

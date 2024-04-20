@@ -54,7 +54,7 @@ const Dashboard = () => {
                 const config = {
                     headers: { Authorization: `Bearer ${token}` }
                 };
-                const response = await axios.get(`http://localhost:5000/api/users/${user._id}/bookings`, config);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${user._id}/bookings`, config);
                 setBookings(response.data);
             } catch (err) {
                 setError('Failed to fetch bookings');
@@ -68,7 +68,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchRoomDetails = async (roomId) => {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/api/rooms/${roomId}`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/rooms/${roomId}`);
                 setRoomDetails(response.data);
             } catch (err) {
                 console.error('Failed to fetch room details', err);
