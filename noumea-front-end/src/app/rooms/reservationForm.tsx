@@ -5,7 +5,7 @@ import { addDays, differenceInDays, isMonday, format, eachDayOfInterval, isSatur
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
-const RoomReservationForm = ({ existingReservations, room } : any) => {
+const RoomReservationForm = ({ existingReservations, room }: any) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [includeChildren, setIncludeChildren] = useState(false);
@@ -45,13 +45,14 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
 
 
   // Function to handle form submission
-  const handleSubmit = async (e : any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const header = {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem('token')}`
     };
+    console.log("header", startDate, endDate, room, includeChildren, includeChildrenBed);
     const reservationData = {
       roomId: room._id,
       startDate: format(startDate, 'yyyy-MM-dd'),
@@ -74,7 +75,7 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
         // Redirect to dashboard
         window.location.href = '/dashboard';
       });
-    } catch (error : any) {
+    } catch (error: any) {
       console.error('Error creating reservation:', error);
       alert('Failed to create reservation. Error: ' + error.response.data.error);
     }
@@ -87,15 +88,15 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
   };
 
   // Block all Mondays
-  const isDayBlocked = (date : any) => {
+  const isDayBlocked = (date: any) => {
     // Block the day if it is a Monday
     if (isMonday(date)) return false;
     // Also block the day if it falls within any of the existing reservations
-    return existingReservations.some((reservation : any) => { 
+    return existingReservations.some((reservation: any) => {
       const reservationStartDate = new Date(reservation.startDate);
       const reservationEndDate = new Date(reservation.endDate);
       const isBlocked = date <= reservationStartDate || date >= reservationEndDate;
-      return  isBlocked;
+      return isBlocked;
       console.log("-->", date >= reservationStartDate && date <= reservationEndDate);
       // if date is in between start and end date of any reservation, block it
       return date >= reservationStartDate && date <= reservationEndDate;
@@ -111,7 +112,7 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
       <div className="date-picker">
         <label>Start Date:</label>
         <DatePicker
-          selected={new Date(startDate)}
+          selected={startDate ? new Date(startDate) : null}
           onChange={(date: any) => {
             // setStartDate(date);
             // save date as yyyy-mm-dd
@@ -119,8 +120,8 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
             handleFormChange();
           }}
           selectsStart
-          startDate={new Date(startDate)}
-          endDate={new Date(endDate)}
+          startDate={startDate ? new Date(startDate) : null}
+          endDate={endDate ? new Date(endDate) : null}
           filterDate={isDayBlocked}
           placeholderText="Select start date"
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -131,7 +132,7 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
         <label>End Date:</label>
         <DatePicker
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          selected={new Date(endDate)}
+          selected={endDate ? new Date(endDate) : null}
           onChange={(date: any) => {
             if (startDate && date > startDate) {
               setEndDate(date);
@@ -142,9 +143,9 @@ const RoomReservationForm = ({ existingReservations, room } : any) => {
             }
           }}
           selectsEnd
-          startDate={new Date(startDate)}
-          endDate={new Date(endDate)}
-          minDate={new Date(startDate)}
+          startDate={startDate ? new Date(startDate) : null}
+          endDate={endDate ? new Date(endDate) : null}
+          minDate={startDate ? new Date(startDate) : null}
           filterDate={isDayBlocked}
           placeholderText="Select end date"
           // show date in yyyy-mm-dd format

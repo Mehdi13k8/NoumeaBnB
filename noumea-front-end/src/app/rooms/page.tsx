@@ -1,5 +1,5 @@
 "use client"; // This is a client component
-import React, { Key, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import RoomReservationForm from './reservationForm';
 import Link from 'next/link';
@@ -21,6 +21,7 @@ const RoomDetails = () => {
     const fetchRoomDetails = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/rooms/${id}`);
+        console.log('Room details:', response.data);
         setRoom(response.data);
       } catch (error) {
         console.error('Error fetching room details:', error);
@@ -68,9 +69,9 @@ const RoomDetails = () => {
           <p><strong>Description:</strong> {room?.description}</p>
           <p><strong>Status:</strong> {room?.isAvailable ? "Available" : "Not Available"}</p>
           <h2 className="text-xl font-bold mt-4 mb-2">Reviews</h2>
-          {room?.reviews?.map((review: any, index: Key) => (
+          {/* {room?.reviews?.map((review: any, index: Key) => (
             <p key={index}><strong>{review.user}:</strong> {review.review}</p>
-          ))}
+          ))} */}
           <h2 className="text-xl font-bold mt-4">Book This Room</h2>
           <RoomReservationForm existingReservations={reservation} room={room} />
         </div>
@@ -81,7 +82,9 @@ const RoomDetails = () => {
 
 // export default RoomDetails;
 export default function RoomDetailsWithSuspense() {
-  <Suspense fallback={<div>Loading...</div>}>
-    <RoomDetails />
-  </Suspense>
+  return (
+      <Suspense fallback={<div>LoadDZdadazdazding...</div>}>
+        <RoomDetails />
+      </Suspense>
+  );
 };

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 80 --turbo",
+    "dev": "next dev -p 80",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,6 +20,7 @@
     "react-datepicker": "^6.6.0",
     "react-dom": "^18.2.0",
     "react-responsive-carousel": "^3.2.23",
+    "sass": "^1.77.8",
     "sweetalert2": "^11.10.7"
   },
   "devDependencies": {

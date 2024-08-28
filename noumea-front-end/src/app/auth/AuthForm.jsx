@@ -29,6 +29,7 @@ const AuthForm = () => {
                 localStorage.setItem('token', response.data.token);
                 router.push('/dashboard');
             } catch (error) {
+                console.error('Login failed', error);
                 console.error('Login failed', error.response.data);
             }
         } else {

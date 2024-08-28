@@ -4,6 +4,7 @@ const nextConfig = {
   basePath: "",
   images: {
     domains: ["picsum.photos"],
+    unoptimized: true
   },
   output: 'export',
 };
