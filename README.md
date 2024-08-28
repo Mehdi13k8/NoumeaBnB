@@ -3,6 +3,7 @@ Application de location de gites
 
 # launch back end
 cd Noumea-Back-End
+yarn install
 node app.js
 
 # launch Front End
