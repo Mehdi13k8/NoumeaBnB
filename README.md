@@ -7,7 +7,7 @@ yarn install
 node app.js
 
 # launch Front End
-cd Front-end/noumea-front-end
+cd noumea-front-end
 yarn install
 yarn dev
 
